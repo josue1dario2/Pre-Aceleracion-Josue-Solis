@@ -5,8 +5,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,26 +19,28 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Table(name = "personaje")
-@SQLDelete(sql = "UPDATE personaje SET deleted = true WHERE id=? ")
+@SQLDelete(sql = "UPDATE personaje SET deleted = true, deleted_at = CURRENT_TIMESTAMP WHERE id=?")
 @Where(clause = "deleted=false")
-public class PersonajeEntity {
+public class PersonajeEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column
     private String imagen;
-    @Column
     private String nombre;
-    @Column
     private Integer edad;
-    @Column
     private Double peso;
-    @Column
     private String historia;
-
-    private boolean deleted = Boolean.FALSE;
 
     @ManyToMany(mappedBy = "personajes",cascade = CascadeType.ALL)
     private List<PeliculaEntity> peliculas = new ArrayList<>();
+
+    private boolean deleted = Boolean.FALSE;
+
+    @CreatedDate
+    private LocalDateTime createdAt;
+    @LastModifiedDate
+    private LocalDateTime modifiedAt;
+    private LocalDateTime deletedAt;
 }
