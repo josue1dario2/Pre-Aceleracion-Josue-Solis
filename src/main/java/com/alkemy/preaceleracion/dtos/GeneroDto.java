@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class GeneroDto implements Serializable {
+public class GeneroDto{
 
     private Long id;
     private String nombre;
