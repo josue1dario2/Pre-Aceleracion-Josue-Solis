@@ -1,0 +1,90 @@
+package com.alkemy.preaceleracion.controller;
+
+import com.alkemy.preaceleracion.dto.PersonajeDto;
+import com.alkemy.preaceleracion.exception.SpringException;
+import com.alkemy.preaceleracion.service.impl.PersonajeServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Set;
+
+import static org.springframework.http.HttpStatus.*;
+
+@RestController
+@CrossOrigin(origins = "*")
+@RequestMapping(path = "/characters")
+public class PersonajeController {
+
+    @Autowired
+    private PersonajeServiceImpl personajeService;
+
+    @GetMapping
+    public ResponseEntity<?> getAll(){
+        try{
+            return ResponseEntity.status(OK).body(personajeService.findAll());
+        }catch (SpringException e){
+            return ResponseEntity.status(NOT_FOUND).body(e.getMessage());
+        }
+    }
+    @GetMapping(path = "/listaPersonajes")
+    public ResponseEntity<?> getAllIcon(){
+        try{
+            return ResponseEntity.status(OK).body(personajeService.findAllPersonajes());
+        }catch (SpringException e){
+            return ResponseEntity.status(NOT_FOUND).body(e.getMessage());
+        }
+    }
+    @GetMapping(path = "/filtros")
+    public ResponseEntity<?> getDetailsByFilters(
+            @RequestParam(required = false)String nombre,
+            @RequestParam(required = false)String edad,
+            @RequestParam(required = false) Set<Long> paises){
+        try{
+            List<PersonajeDto> iconos = personajeService.getByFilters(nombre,edad,paises);
+            return ResponseEntity.ok(iconos);
+        }catch (SpringException e){
+         return ResponseEntity.status(NOT_FOUND).body(e.getMessage());
+        }
+
+    }
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getOne(@PathVariable Long id){
+        try{
+            return ResponseEntity.status(OK).body(personajeService.findById(id));
+        }catch (SpringException e){
+            return ResponseEntity.status(NOT_FOUND).body(e.getMessage());
+        }
+
+    }
+
+    @PostMapping
+    public ResponseEntity<?> save(@RequestBody PersonajeDto t){
+        try{
+            return ResponseEntity.status(OK).body(personajeService.save(t));
+        }catch (SpringException e){
+            return ResponseEntity.status(NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id,@RequestBody PersonajeDto t){
+        try{
+            return ResponseEntity.status(OK).body(personajeService.update(id,t));
+        }catch (SpringException e){
+            return ResponseEntity.status(NOT_FOUND).body(e.getMessage());
+        }
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id){
+        try{
+            personajeService.delete(id);
+            return ResponseEntity.status(NO_CONTENT).build();
+        }catch (SpringException e){
+            return ResponseEntity.status(NOT_FOUND).build();
+        }
+    }
+}

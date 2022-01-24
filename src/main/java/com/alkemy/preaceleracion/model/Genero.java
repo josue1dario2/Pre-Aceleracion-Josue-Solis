@@ -1,4 +1,4 @@
-package com.alkemy.preaceleracion.entities;
+package com.alkemy.preaceleracion.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,11 +15,10 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 @Table(name = "genero")
-@SQLDelete(sql = "UPDATE genero SET deleted = true, deleted_at = CURRENT_TIMESTAMP WHERE id=?")
+@SQLDelete(sql = "UPDATE genero SET deleted = true WHERE id=? ")
 @Where(clause = "deleted=false")
 @Entity
-public class GeneroEntity implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class Genero {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,10 +27,5 @@ public class GeneroEntity implements Serializable {
     private String imagen;
 
     private Boolean deleted = Boolean.FALSE;
-    @CreatedDate
-    private LocalDateTime createdAt;
-    @LastModifiedDate
-    private LocalDateTime modifiedAt;
-    private LocalDateTime deletedAt;
 
 }

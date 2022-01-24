@@ -1,4 +1,4 @@
-package com.alkemy.preaceleracion.entities;
+package com.alkemy.preaceleracion.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,10 +19,9 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Table(name = "personaje")
-@SQLDelete(sql = "UPDATE personaje SET deleted = true, deleted_at = CURRENT_TIMESTAMP WHERE id=?")
+@SQLDelete(sql = "UPDATE personaje SET deleted = true WHERE id=? ")
 @Where(clause = "deleted=false")
-public class PersonajeEntity implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class Personaje {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,13 +33,8 @@ public class PersonajeEntity implements Serializable {
     private String historia;
 
     @ManyToMany(mappedBy = "personajes",cascade = CascadeType.ALL)
-    private List<PeliculaEntity> peliculas = new ArrayList<>();
+    private List<Pelicula> peliculas = new ArrayList<>();
 
     private boolean deleted = Boolean.FALSE;
 
-    @CreatedDate
-    private LocalDateTime createdAt;
-    @LastModifiedDate
-    private LocalDateTime modifiedAt;
-    private LocalDateTime deletedAt;
 }

@@ -1,4 +1,4 @@
-package com.alkemy.preaceleracion.entities;
+package com.alkemy.preaceleracion.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -22,8 +22,7 @@ import java.util.List;
 @SQLDelete(sql = "UPDATE pelicula SET deleted = true WHERE id=? ")
 @Where(clause = "deleted=false")
 @Entity
-public class PeliculaEntity implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class Pelicula {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +35,7 @@ public class PeliculaEntity implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinColumn(name = "genero_id",insertable = false,updatable = false)
-    private GeneroEntity genero;
+    private Genero genero;
 
     @Column(name = "genero_id",nullable = false)
     private Long generoId;
@@ -52,13 +51,27 @@ public class PeliculaEntity implements Serializable {
             joinColumns = @JoinColumn(name = "pelicula_id"),
             inverseJoinColumns = @JoinColumn(name = "personaje_id")
     )
-    private List<PersonajeEntity> personajes = new ArrayList<>();
+    private List<Personaje> personajes = new ArrayList<>();
 
     private boolean deleted = Boolean.FALSE;
 
-    @CreatedDate
-    private LocalDateTime createdAt;
-    @LastModifiedDate
-    private LocalDateTime modifiedAt;
-    private LocalDateTime deletedAt;
+
+    public void addPersonaje(Personaje personaje){
+
+        this.personajes.add(personaje);
+    }
+    public void removePersonaje(Personaje personaje){
+
+        this.personajes.remove(personaje);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final Pelicula other = (Pelicula) obj;
+        return other.id == this.id;
+    }
 }

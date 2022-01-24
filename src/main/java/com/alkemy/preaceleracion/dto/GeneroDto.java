@@ -1,10 +1,8 @@
-package com.alkemy.preaceleracion.dtos;
+package com.alkemy.preaceleracion.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.io.Serializable;
 
 @Getter
 @Setter
