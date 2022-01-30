@@ -20,6 +20,7 @@ public class PeliculaMapper {
     public Pelicula convertToEntity(PeliculaDto dto) throws SpringException {
         Pelicula entity = new Pelicula();
 
+        entity.setId(dto.getId());
         entity.setTitulo(dto.getTitulo());
         entity.setFechaDeCreacion(stringToLocalDate(dto.getFechaDeCreacion()));
         entity.setImagen(dto.getImagen());

@@ -38,28 +38,20 @@ public class PersonajeServiceImpl implements PersonajeService<PersonajeDto,Long>
     @Autowired
     private PersonajeEspecificacion personajeEspecificacion;
 
-    private static String ERROR_1 = "No hay personajes en la base de datos";
-    private static String ERROR_2 = "El personaje no esta en la base de datos";
-    private static String ERROR_3 = "La pelicula ingresada no existe";
-    private static String ERROR_4 = "La fecha introducida no existe";
-    private static String ERROR_5 = "La pais_id introducido no existe";
     @Override
     @Transactional
-    public List<PersonajeDto> findAll() throws SpringException {
-        try{
+    public List<PersonajeDto> findAll(){
+
             List<Personaje> personajes  = personajeRepository.findAll();
             if(personajes.isEmpty()){
-                throw new SpringException(ERROR_1);
+                throw new SpringException("La lista esta vacía");
             }
             List<PersonajeDto> iconosDtos = personajeMapper.convertEntityToDtoList(personajes,false);
             return iconosDtos;
 
-        }catch (SpringException e){
-            throw new SpringException(e.getMessage());
-        }
     }
     @Transactional
-    public List<PersonajeDto> getByFilters(String nombre, String edad, Set<Long> paises) throws SpringException {
+    public List<PersonajeDto> getByFilters(String nombre, String edad, Set<Long> paises){
         PersonajeFilterDto filtersDTO = new PersonajeFilterDto(nombre, edad, paises);
         List<Personaje> entities = personajeRepository.findAll(personajeEspecificacion.getByFilters(filtersDTO));
         List<PersonajeDto> dtos = personajeMapper.convertEntityToDtoList(entities,true);
@@ -67,81 +59,66 @@ public class PersonajeServiceImpl implements PersonajeService<PersonajeDto,Long>
     }
 
     @Override
-    public List<PersonajeDto> findAllPersonajes() throws SpringException {
-        try{
+    public List<PersonajeDto> findAllPersonajes() {
+
             List<Personaje> personajes  = personajeRepository.findAll();
             List<PersonajeDto> personajeDtos = new ArrayList<>();
 
             if(personajes.isEmpty()){
-                throw new SpringException(ERROR_1);
+                throw new SpringException("La lista de personajes esta vacía");
             }
             for(Personaje personaje : personajes){
                 personajeDtos.add(personajeMapper.listaPersonaje(personaje));
             }
             return personajeDtos;
 
-        }catch (SpringException e){
-            throw new SpringException(e.getMessage());
-        }
     }
 
     @Override
     @Transactional
-    public PersonajeDto findById(Long id) throws SpringException {
-        try{
+    public PersonajeDto findById(Long id){
+
             Optional<Personaje> personaje = personajeRepository.findById(id);
             if(!personaje.isPresent()){
-                throw new SpringException(ERROR_2);
+                throw new SpringException("Id de personaje no válido");
             }
             return personajeMapper.convertToDto(personaje.get(),false);
 
-        }catch (SpringException e){
-            throw new SpringException(e.getMessage());
-        }
     }
 
     @Override
-    public PersonajeDto save(PersonajeDto dto) throws SpringException {
-        try{
+    public PersonajeDto save(PersonajeDto dto){
+
             Personaje personaje = personajeMapper.convertToEntity(dto);
             personajeRepository.save(personaje);
 
             return personajeMapper.convertToDto(personaje,false);
 
-        }catch (SpringException e){
-            throw new SpringException(e.getMessage());
-        }
     }
 
     @Override
-    public PersonajeDto update(Long id, PersonajeDto dto) throws SpringException {
-        try{
+    public PersonajeDto update(Long id, PersonajeDto dto) {
+
             Optional<Personaje> personaje = personajeRepository.findById(id);
 
             if(!personaje.isPresent()){
-                throw new SpringException(ERROR_2);
+                throw new SpringException("Id de personaje no válido");
             }
             Personaje entity = personajeMapper.convertToEntity(dto);
             personajeRepository.save(entity);
 
             return personajeMapper.convertToDto(personaje.get(),false);
 
-        }catch (SpringException e){
-            throw new SpringException(e.getMessage());
-        }
     }
 
     @Override
     @Transactional
-    public void delete(Long id) throws SpringException {
-        try{
+    public void delete(Long id)  {
+
             if(personajeRepository.existsById(id)){
                 personajeRepository.deleteById(id);
             }else{
-                throw new SpringException(ERROR_2);
+                throw new SpringException("Id de personaje no válido");
             }
-        }catch (SpringException e){
-            throw new SpringException(e.getMessage());
-        }
     }
 }

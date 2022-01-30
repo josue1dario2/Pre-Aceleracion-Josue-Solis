@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
@@ -19,43 +21,30 @@ public class GeneroController {
 
     @GetMapping
     public ResponseEntity<?> getAll() {
-        try{
-            return ResponseEntity.status(OK).body(generoService.findAll());
-        }catch (SpringException e) {
-            return ResponseEntity.status(NOT_FOUND).body(e.getMessage());
-        }
+        List<GeneroDto> generos = generoService.findAll();
+        return ResponseEntity.ok(generos);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getOne(@PathVariable Long id) {
-        try{
-            return ResponseEntity.status(OK).body(generoService.findById(id));
-        }catch (SpringException e) {
-            return ResponseEntity.status(NOT_FOUND).body(e.getMessage());
-        }
+        GeneroDto genero = generoService.findById(id);
+        return ResponseEntity.ok(genero);
     }
 
     @PostMapping
     public ResponseEntity<?> save(@RequestBody GeneroDto dto) {
-        try{
-            return ResponseEntity.status(CREATED).body(generoService.save(dto));
-        }catch (SpringException e) {
-            return ResponseEntity.status(BAD_REQUEST).body(e.getMessage());
-        }
+        GeneroDto genero = generoService.save(dto);
+        return ResponseEntity.status(CREATED).body(genero);
     }
 
     @PutMapping
     public ResponseEntity<?> update(@RequestBody GeneroDto dto) {
-
-        try{
-            return ResponseEntity.status(OK).body(generoService.update(dto));
-        }catch (SpringException e) {
-            return ResponseEntity.status(BAD_REQUEST).body(e.getMessage());
-        }
+        GeneroDto result = generoService.update(dto);
+        return ResponseEntity.ok().body(result);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) throws SpringException {
+    public void delete(@PathVariable Long id){
         generoService.delete(id);
     }
 

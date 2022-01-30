@@ -6,15 +6,15 @@ import java.util.List;
 
 public interface PersonajeService <T,ID>{
 
-    public List<T> findAll()throws SpringException;
+    public List<T> findAll();
 
-    public List<T> findAllPersonajes()throws SpringException;
+    public List<T> findAllPersonajes();
 
-    public T findById(ID id)throws SpringException;
+    public T findById(ID id);
 
-    public T save(T entity)throws SpringException;
+    public T save(T entity);
 
-    public T update(ID id,T entity)throws SpringException;
+    public T update(ID id,T entity);
 
-    public void delete(ID id)throws SpringException;
+    public void delete(ID id);
 }

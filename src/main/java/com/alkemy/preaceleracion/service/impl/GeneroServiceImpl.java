@@ -18,10 +18,6 @@ import java.util.Optional;
 @Service
 public class GeneroServiceImpl implements GeneroService<GeneroDto,Long> {
 
-    private final String ERROR_1 = "No hay géneros en la base de datos";
-    private final String ERROR_2 = "El género no esta en la base de datos";
-    private final String ERROR_3 = "Error en el servidor";
-
     @Autowired
     private GeneroRepository generoRepository;
     @Autowired
@@ -29,78 +25,68 @@ public class GeneroServiceImpl implements GeneroService<GeneroDto,Long> {
 
     @Override
     @Transactional
-    public List<GeneroDto> findAll() throws SpringException {
-        try{
+    public List<GeneroDto> findAll(){
+
             List<GeneroDto> generoDtos = new ArrayList<>();
             List<Genero> generos = generoRepository.findAll();
 
             if(generos.isEmpty()){
-                throw new SpringException(ERROR_1);
+                throw new SpringException("La lista de géneros esta vacía");
             }
             for(Genero genero : generos){
                 generoDtos.add(generoConverter.convertToDto(genero));
             }
             return generoDtos;
-        }catch (Exception e){
-            throw new SpringException(e.getMessage());
-        }
+
     }
 
     @Override
     @Transactional
-    public GeneroDto findById(Long id) throws SpringException {
-        try{
+    public GeneroDto findById(Long id){
+
             Optional<Genero> genero = generoRepository.findById(id);
 
             if(!genero.isPresent()){
-                throw new SpringException(ERROR_2);
+                throw new SpringException("Id de género no válido");
             }
             return generoConverter.convertToDto(genero.get());
-        }catch (Exception e){
-            throw new SpringException(e.getMessage());
-        }
+
     }
 
     @Override
     @Transactional
-    public GeneroDto save(GeneroDto dto) throws SpringException {
-        try{
+    public GeneroDto save(GeneroDto dto){
+
             Genero genero = generoConverter.convertToEntity(dto);
             generoRepository.save(genero);
             return generoConverter.convertToDto(genero);
-        }catch (Exception e){
-            throw new SpringException(e.getMessage());
-        }
+
     }
 
     @Override
     @Transactional
-    public GeneroDto update(GeneroDto dto) throws SpringException {
-        try{
+    public GeneroDto update(GeneroDto dto){
+
             Genero genero = generoRepository.getById(dto.getId());
             if(genero == null){
-                throw new SpringException(ERROR_2);
+                throw new SpringException("Id de género no válido");
             }
             genero = generoConverter.convertToEntity(dto);
             generoRepository.save(genero);
 
             return generoConverter.convertToDto(genero);
-        }catch (Exception e){
-            throw new SpringException(ERROR_1);
-        }
+
     }
 
     @Override
     @Transactional
-    public void delete(Long id) throws SpringException {
-        try{
+    public void delete(Long id) {
+
             if(generoRepository.existsById(id)) {
                 generoRepository.deleteById(id);
             }else {
-                throw new SpringException(ERROR_2);
+                throw new SpringException("Id de género no válido");
             }
-        }catch (Exception e){
-            throw new SpringException(e.getMessage());
-        }
+
     }
 }

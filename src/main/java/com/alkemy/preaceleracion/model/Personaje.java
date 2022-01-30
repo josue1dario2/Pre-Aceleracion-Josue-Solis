@@ -37,4 +37,13 @@ public class Personaje {
 
     private boolean deleted = Boolean.FALSE;
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final Personaje other = (Personaje) obj;
+        return other.id == this.id;
+    }
 }

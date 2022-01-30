@@ -45,30 +45,21 @@ public class PeliculaServiceImpl implements PeliculaService<PeliculaDto,Long> {
     @Autowired
     private PeliculaEspecificacion peliculaEspecificacion;
 
-    private static String ERROR_1 = "No hay peliculas en la base de datos";
-    private static String ERROR_2 = "La pelicula no esta en la base de datos";
-    private static String ERROR_3 = "La denominación ingresada no existe en la base de datos";
-    private static String ERROR_4 = "El id ingresado no tiene personajes vinculados";
-    private static String ERROR_5 = "El orden ingresado no es válido";
-
     @Override
     @Transactional
-    public List<PeliculaDto> findAll() throws SpringException {
-        try{
+    public List<PeliculaDto> findAll(){
+
             List<Pelicula> paises  = peliculaRepository.findAll();
             if(paises.isEmpty()){
-                throw new SpringException(ERROR_1);
+                throw new SpringException("La lista esta vácia");
             }
             List<PeliculaDto> paisesDto = peliculaMapper.convertToDtoList(paises,true);
             return paisesDto;
 
-        }catch (SpringException e){
-            throw new SpringException(e.getMessage());
-        }
     }
 
     @Transactional
-    public List<PersonajeDto> getByFilters(String nombre, Long idGenero,String order) throws SpringException {
+    public List<PersonajeDto> getByFilters(String nombre, Long idGenero,String order) {
         PeliculaFilterDto filterDto = new PeliculaFilterDto(nombre, idGenero, order);
         List<Personaje> entities = personajeRepository.findAll(peliculaEspecificacion.getByFilters(filterDto));
         List<PersonajeDto> dtos = personajeMapper.convertEntityToDtoList(entities,true);
@@ -76,130 +67,111 @@ public class PeliculaServiceImpl implements PeliculaService<PeliculaDto,Long> {
     }
 
     @Override
-    public List<PeliculaDto> findCities() throws SpringException {
-        try{
-            List<Pelicula> paises  = peliculaRepository.findAll();
-            if(paises.isEmpty()){
-                throw new SpringException(ERROR_1);
-            }
-            List<PeliculaDto> paisesDto = new ArrayList<>();
+    public List<PeliculaDto> findMovies(){
 
-            for(Pelicula pais : paises){
-                paisesDto.add(peliculaMapper.convertToDtoCities(pais));
+            List<Pelicula> pelicula  = peliculaRepository.findAll();
+            if(pelicula.isEmpty()){
+                throw new SpringException("La lista esta vácia");
+            }
+            List<PeliculaDto> peliculaDto = new ArrayList<>();
+
+            for(Pelicula movie : pelicula){
+                peliculaDto.add(peliculaMapper.convertToDtoCities(movie));
             }
 
-            return paisesDto;
-        }catch (SpringException e){
-            throw new SpringException(e.getMessage());
-        }
+            return peliculaDto;
+
     }
 
     @Override
     @Transactional
-    public PeliculaDto findById(Long id) throws SpringException {
-        try{
+    public PeliculaDto findById(Long id){
+
             Optional<Pelicula> entity = peliculaRepository.findById(id);
 
             if(!entity.isPresent()){
-                throw new SpringException(ERROR_2);
+                throw new SpringException("Id no válido");
             }
             return peliculaMapper.converToDto(entity.get(),false);
 
-        }catch (SpringException e){
-            throw new SpringException(e.getMessage());
-        }
     }
 
     @Override
-    public List<PeliculaDto> findByIdPelicula(Long peliculaId) throws SpringException {
-        try{
-            List<Pelicula> paises  = peliculaRepository.findByIdPelicula(peliculaId);
-            List<PeliculaDto> paisesDto = new ArrayList<>();
+    public List<PeliculaDto> findByIdPelicula(Long peliculaId){
 
-            if(paises.isEmpty()){
-                throw new SpringException(ERROR_4);
+            List<Pelicula> pelicula  = peliculaRepository.findByIdPelicula(peliculaId);
+            List<PeliculaDto> peliculaDto = new ArrayList<>();
+
+            if(pelicula.isEmpty()){
+                throw new SpringException("Id no válido");
             }
-            for(Pelicula pais : paises){
-                paisesDto.add(peliculaMapper.convertToDtoCities(pais));
+            for(Pelicula movie : pelicula){
+                peliculaDto.add(peliculaMapper.convertToDtoCities(movie));
             }
 
-            return paisesDto;
-        }catch (SpringException e){
-            throw new SpringException(e.getMessage());
-        }
+            return peliculaDto;
+
     }
 
     @Override
     @Transactional
-    public PeliculaDto save(PeliculaDto peliculaDto) throws SpringException {
-        try{
+    public PeliculaDto save(PeliculaDto peliculaDto){
+
             Pelicula entity = peliculaMapper.convertToEntity(peliculaDto);
             peliculaRepository.save(entity);
 
-            return peliculaMapper.converToDto(entity,false);
+            return peliculaMapper.converToDto(entity,true);
 
-        }catch (SpringException e){
-            throw new SpringException(e.getMessage());
-        }
     }
 
     @Override
     @Transactional
-    public PeliculaDto update(Long id, PeliculaDto peliculaDto) throws SpringException {
-        try{
-            Optional<Pelicula> pais = peliculaRepository.findById(id);
+    public PeliculaDto update(Long id, PeliculaDto peliculaDto){
 
-            if(!pais.isPresent()){
-                throw new SpringException(ERROR_2);
+            Optional<Pelicula> pelicula = peliculaRepository.findById(id);
+
+            if(!pelicula.isPresent()){
+                throw new SpringException("Id no válido");
             }
             Pelicula entity = peliculaMapper.convertToEntity(peliculaDto);
             peliculaRepository.save(entity);
-            return peliculaMapper.converToDto(pais.get(),false);
+            return peliculaMapper.converToDto(pelicula.get(),false);
 
-        }catch (SpringException e){
-            throw new SpringException(e.getMessage());
-        }
     }
 
     @Override
     @Transactional
-    public boolean delete(Long id) throws SpringException {
-        try{
+    public boolean delete(Long id){
+
             if(peliculaRepository.existsById(id)){
                 peliculaRepository.deleteById(id);
                 return true;
             }else{
-                throw new SpringException(ERROR_2);
+                throw new SpringException("Id no válido");
             }
-        }catch (SpringException e){
-            throw new SpringException(e.getMessage());
-        }
     }
 
     @Override
-    public void addPersonaje(Long id, Long idPersonaje) throws SpringException {
-        try{
-            Optional<Pelicula> pais = peliculaRepository.findById(id);
-            if(!pais.isPresent()){
-                throw new SpringException(ERROR_2);
+    public void addPersonaje(Long id, Long idPersonaje){
+
+            Optional<Pelicula> pelicula = peliculaRepository.findById(id);
+            if(!pelicula.isPresent()){
+                throw new SpringException("Id no válido");
             }
-            Pelicula peliculaEntity = pais.get();
+            Pelicula peliculaEntity = pelicula.get();
             peliculaEntity.getPersonajes().size();
             PersonajeDto personajeDto = personajeService.findById(idPersonaje);
             peliculaEntity.addPersonaje(personajeMapper.convertToEntity(personajeDto));
             peliculaRepository.save(peliculaEntity);
 
-        }catch (SpringException e){
-            throw new SpringException(e.getMessage());
-        }
     }
 
     @Override
-    public void removePersonaje(Long id, Long idPersonaje) throws SpringException {
-        try{
+    public void removePersonaje(Long id, Long idPersonaje){
+
             Optional<Pelicula> pais = peliculaRepository.findById(id);
             if(!pais.isPresent()){
-                throw new SpringException(ERROR_2);
+                throw new SpringException("Id no válido");
             }
             Pelicula peliculaEntity = pais.get();
             peliculaEntity.getPersonajes().size();
@@ -207,8 +179,5 @@ public class PeliculaServiceImpl implements PeliculaService<PeliculaDto,Long> {
             peliculaEntity.removePersonaje(personajeMapper.convertToEntity(iconoDto));
             peliculaRepository.save(peliculaEntity);
 
-        }catch (SpringException e){
-            throw new SpringException(e.getMessage());
-        }
     }
 }

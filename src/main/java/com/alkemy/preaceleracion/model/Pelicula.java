@@ -65,13 +65,13 @@ public class Pelicula {
         this.personajes.remove(personaje);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        final Pelicula other = (Pelicula) obj;
-        return other.id == this.id;
-    }
+    //@Override
+    //public boolean equals(Object obj) {
+      //  if (obj == null)
+        //    return false;
+        //if (getClass() != obj.getClass())
+          //  return false;
+        //final Pelicula other = (Pelicula) obj;
+        //return other.id == this.id;
+    //}
 }

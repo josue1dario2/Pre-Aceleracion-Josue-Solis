@@ -22,69 +22,42 @@ public class PersonajeController {
 
     @GetMapping
     public ResponseEntity<?> getAll(){
-        try{
-            return ResponseEntity.status(OK).body(personajeService.findAll());
-        }catch (SpringException e){
-            return ResponseEntity.status(NOT_FOUND).body(e.getMessage());
-        }
+        List<PersonajeDto> personajes = personajeService.findAll();
+        return ResponseEntity.ok(personajes);
     }
     @GetMapping(path = "/listaPersonajes")
-    public ResponseEntity<?> getAllIcon(){
-        try{
-            return ResponseEntity.status(OK).body(personajeService.findAllPersonajes());
-        }catch (SpringException e){
-            return ResponseEntity.status(NOT_FOUND).body(e.getMessage());
-        }
+    public ResponseEntity<?> getAllPersonajes(){
+        List<PersonajeDto> personajes = personajeService.findAllPersonajes();
+        return ResponseEntity.ok(personajes);
     }
     @GetMapping(path = "/filtros")
     public ResponseEntity<?> getDetailsByFilters(
             @RequestParam(required = false)String nombre,
             @RequestParam(required = false)String edad,
             @RequestParam(required = false) Set<Long> paises){
-        try{
-            List<PersonajeDto> iconos = personajeService.getByFilters(nombre,edad,paises);
-            return ResponseEntity.ok(iconos);
-        }catch (SpringException e){
-         return ResponseEntity.status(NOT_FOUND).body(e.getMessage());
-        }
-
+        List<PersonajeDto> personajes = personajeService.getByFilters(nombre, edad, paises);
+        return ResponseEntity.ok(personajes);
     }
-
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getOne(@PathVariable Long id){
-        try{
-            return ResponseEntity.status(OK).body(personajeService.findById(id));
-        }catch (SpringException e){
-            return ResponseEntity.status(NOT_FOUND).body(e.getMessage());
-        }
-
+        PersonajeDto personaje = personajeService.findById(id);
+        return ResponseEntity.ok(personaje);
     }
 
     @PostMapping
     public ResponseEntity<?> save(@RequestBody PersonajeDto t){
-        try{
-            return ResponseEntity.status(OK).body(personajeService.save(t));
-        }catch (SpringException e){
-            return ResponseEntity.status(NOT_FOUND).body(e.getMessage());
-        }
+        PersonajeDto personaje = personajeService.save(t);
+        return ResponseEntity.status(CREATED).body(personaje);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id,@RequestBody PersonajeDto t){
-        try{
-            return ResponseEntity.status(OK).body(personajeService.update(id,t));
-        }catch (SpringException e){
-            return ResponseEntity.status(NOT_FOUND).body(e.getMessage());
-        }
+        PersonajeDto personaje = personajeService.update(id,t);
+        return ResponseEntity.ok(personaje);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
-        try{
-            personajeService.delete(id);
-            return ResponseEntity.status(NO_CONTENT).build();
-        }catch (SpringException e){
-            return ResponseEntity.status(NOT_FOUND).build();
-        }
+    public void delete(@PathVariable Long id){
+        personajeService.delete(id);
     }
 }

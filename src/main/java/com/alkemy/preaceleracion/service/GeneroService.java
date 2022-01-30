@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface GeneroService <T,ID>{
 
-    public List<T> findAll()throws SpringException;
+    public List<T> findAll();
 
-    public T findById(ID id)throws SpringException;
+    public T findById(ID id);
 
-    public T save(T entity)throws SpringException;
+    public T save(T entity);
 
-    public T update(T entity)throws SpringException;
+    public T update(T entity);
 
-    public void delete(ID id)throws SpringException;
+    public void delete(ID id);
 }

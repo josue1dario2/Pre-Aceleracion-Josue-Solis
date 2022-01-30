@@ -22,88 +22,55 @@ public class PeliculaController {
 
     @GetMapping
     public ResponseEntity<?> getAll(){
-        try{
-            return ResponseEntity.status(OK).body(peliculaService.findAll());
-        }catch (SpringException e){
-            return ResponseEntity.status(NOT_FOUND).body(e.getMessage());
-        }
+        List<PeliculaDto> peliculas = peliculaService.findAll();
+        return ResponseEntity.ok(peliculas);
     }
-    @GetMapping(path = "cities")
-    public ResponseEntity<?> getAllCities(){
-        try{
-            return ResponseEntity.status(OK).body(peliculaService.findCities());
-        }catch (SpringException e){
-            return ResponseEntity.status(NOT_FOUND).body(e.getMessage());
-        }
+
+    @GetMapping(path = "movies")
+    public ResponseEntity<?> getAllMovies(){
+        List<PeliculaDto> peliculas = peliculaService.findMovies();
+        return ResponseEntity.ok(peliculas);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getOne(@PathVariable Long id){
-        try{
-            return ResponseEntity.status(OK).body(peliculaService.findById(id));
-        }catch (SpringException e){
-            return ResponseEntity.status(NOT_FOUND).body(e.getMessage());
-        }
-
+        PeliculaDto pelicula = peliculaService.findById(id);
+        return ResponseEntity.ok(pelicula);
     }
 
     @PostMapping
     public ResponseEntity<?> save(@RequestBody PeliculaDto t){
-        try{
-            return ResponseEntity.status(OK).body(peliculaService.save(t));
-        }catch (SpringException e){
-            return ResponseEntity.status(NOT_FOUND).body(e.getMessage());
-        }
+        PeliculaDto pelicula = peliculaService.save(t);
+        return ResponseEntity.status(CREATED).body(pelicula);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id,@RequestBody PeliculaDto t){
-        try{
-            return ResponseEntity.status(OK).body(peliculaService.update(id,t));
-        }catch (SpringException e){
-            return ResponseEntity.status(NOT_FOUND).body(e.getMessage());
-        }
+        PeliculaDto pelicula = peliculaService.update(id,t);
+        return ResponseEntity.ok(pelicula);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id){
-        try{
-            return ResponseEntity.status(NO_CONTENT).body(peliculaService.delete(id));
-        }catch (SpringException e){
-            return ResponseEntity.status(NOT_FOUND).body(e.getMessage());
-        }
+    public void delete(@PathVariable Long id){
+        peliculaService.delete(id);
     }
     @GetMapping(path = "/filtros")
     public ResponseEntity<?> getDetailsByFilters(
             @RequestParam(required = false)String nombre,
             @RequestParam(required = false) Long idGenero,
             @RequestParam(required = false,defaultValue = "ASC")String order){
-        try{
-            List<PersonajeDto> iconos = peliculaService.getByFilters(nombre,idGenero,order);
-            return ResponseEntity.ok(iconos);
-        }catch (SpringException e){
-            return ResponseEntity.status(NOT_FOUND).body(e.getMessage());
-        }
-
+        List<PersonajeDto> personajes = peliculaService.getByFilters(nombre, idGenero, order);
+        return ResponseEntity.ok(personajes);
     }
-
 
     @PostMapping(path = "/{id}/personaje/{idPersonaje}")
     public ResponseEntity<Void> addPersonaje(@PathVariable Long id,@PathVariable Long idPersonaje){
-        try{
-            peliculaService.addPersonaje(id,idPersonaje);
-            return ResponseEntity.status(CREATED).build();
-        }catch (SpringException e){
-            return ResponseEntity.status(BAD_REQUEST).build();
-        }
+        peliculaService.addPersonaje(id, idPersonaje);
+        return ResponseEntity.ok().build();
     }
     @DeleteMapping(path = "/{id}/personaje/{idPersonaje}")
     public ResponseEntity<Void> removePersonaje(@PathVariable Long id,@PathVariable Long idPersonaje){
-        try{
-            peliculaService.removePersonaje(id,idPersonaje);
-            return ResponseEntity.status(NO_CONTENT).build();
-        }catch (SpringException e){
-            return ResponseEntity.status(BAD_REQUEST).build();
-        }
+        peliculaService.removePersonaje(id, idPersonaje);
+        return ResponseEntity.ok().build();
     }
 
 }
