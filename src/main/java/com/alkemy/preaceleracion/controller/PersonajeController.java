@@ -25,7 +25,7 @@ public class PersonajeController {
         List<PersonajeDto> personajes = personajeService.findAll();
         return ResponseEntity.ok(personajes);
     }
-    @GetMapping(path = "/listaPersonajes")
+    @GetMapping(path = "/all")
     public ResponseEntity<?> getAllPersonajes(){
         List<PersonajeDto> personajes = personajeService.findAllPersonajes();
         return ResponseEntity.ok(personajes);

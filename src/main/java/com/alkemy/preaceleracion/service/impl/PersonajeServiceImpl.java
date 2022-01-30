@@ -3,6 +3,7 @@ package com.alkemy.preaceleracion.service.impl;
 import com.alkemy.preaceleracion.dto.GeneroDto;
 import com.alkemy.preaceleracion.dto.PersonajeDto;
 import com.alkemy.preaceleracion.dto.PersonajeFilterDto;
+import com.alkemy.preaceleracion.enums.Errors;
 import com.alkemy.preaceleracion.exception.SpringException;
 import com.alkemy.preaceleracion.mapper.PersonajeMapper;
 import com.alkemy.preaceleracion.model.Personaje;
@@ -44,7 +45,7 @@ public class PersonajeServiceImpl implements PersonajeService<PersonajeDto,Long>
 
             List<Personaje> personajes  = personajeRepository.findAll();
             if(personajes.isEmpty()){
-                throw new SpringException("La lista esta vacía");
+                throw new SpringException(Errors.ERROR1);
             }
             List<PersonajeDto> iconosDtos = personajeMapper.convertEntityToDtoList(personajes,false);
             return iconosDtos;
@@ -65,7 +66,7 @@ public class PersonajeServiceImpl implements PersonajeService<PersonajeDto,Long>
             List<PersonajeDto> personajeDtos = new ArrayList<>();
 
             if(personajes.isEmpty()){
-                throw new SpringException("La lista de personajes esta vacía");
+                throw new SpringException(Errors.ERROR1);
             }
             for(Personaje personaje : personajes){
                 personajeDtos.add(personajeMapper.listaPersonaje(personaje));
@@ -80,7 +81,7 @@ public class PersonajeServiceImpl implements PersonajeService<PersonajeDto,Long>
 
             Optional<Personaje> personaje = personajeRepository.findById(id);
             if(!personaje.isPresent()){
-                throw new SpringException("Id de personaje no válido");
+                throw new SpringException(Errors.ERROR2);
             }
             return personajeMapper.convertToDto(personaje.get(),false);
 
@@ -102,7 +103,7 @@ public class PersonajeServiceImpl implements PersonajeService<PersonajeDto,Long>
             Optional<Personaje> personaje = personajeRepository.findById(id);
 
             if(!personaje.isPresent()){
-                throw new SpringException("Id de personaje no válido");
+                throw new SpringException(Errors.ERROR3);
             }
             Personaje entity = personajeMapper.convertToEntity(dto);
             personajeRepository.save(entity);
@@ -118,7 +119,7 @@ public class PersonajeServiceImpl implements PersonajeService<PersonajeDto,Long>
             if(personajeRepository.existsById(id)){
                 personajeRepository.deleteById(id);
             }else{
-                throw new SpringException("Id de personaje no válido");
+                throw new SpringException(Errors.ERROR4);
             }
     }
 }

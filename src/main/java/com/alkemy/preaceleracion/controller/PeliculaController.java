@@ -26,7 +26,7 @@ public class PeliculaController {
         return ResponseEntity.ok(peliculas);
     }
 
-    @GetMapping(path = "movies")
+    @GetMapping(path = "/all")
     public ResponseEntity<?> getAllMovies(){
         List<PeliculaDto> peliculas = peliculaService.findMovies();
         return ResponseEntity.ok(peliculas);

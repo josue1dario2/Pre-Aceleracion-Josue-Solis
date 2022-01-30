@@ -3,6 +3,7 @@ package com.alkemy.preaceleracion.service.impl;
 import com.alkemy.preaceleracion.dto.PeliculaDto;
 import com.alkemy.preaceleracion.dto.PeliculaFilterDto;
 import com.alkemy.preaceleracion.dto.PersonajeDto;
+import com.alkemy.preaceleracion.enums.Errors;
 import com.alkemy.preaceleracion.exception.SpringException;
 import com.alkemy.preaceleracion.mapper.PeliculaMapper;
 import com.alkemy.preaceleracion.mapper.PersonajeMapper;
@@ -51,7 +52,7 @@ public class PeliculaServiceImpl implements PeliculaService<PeliculaDto,Long> {
 
             List<Pelicula> paises  = peliculaRepository.findAll();
             if(paises.isEmpty()){
-                throw new SpringException("La lista esta vácia");
+                throw new SpringException(Errors.ERROR1);
             }
             List<PeliculaDto> paisesDto = peliculaMapper.convertToDtoList(paises,true);
             return paisesDto;
@@ -71,7 +72,7 @@ public class PeliculaServiceImpl implements PeliculaService<PeliculaDto,Long> {
 
             List<Pelicula> pelicula  = peliculaRepository.findAll();
             if(pelicula.isEmpty()){
-                throw new SpringException("La lista esta vácia");
+                throw new SpringException(Errors.ERROR1);
             }
             List<PeliculaDto> peliculaDto = new ArrayList<>();
 
@@ -90,7 +91,7 @@ public class PeliculaServiceImpl implements PeliculaService<PeliculaDto,Long> {
             Optional<Pelicula> entity = peliculaRepository.findById(id);
 
             if(!entity.isPresent()){
-                throw new SpringException("Id no válido");
+                throw new SpringException(Errors.ERROR2);
             }
             return peliculaMapper.converToDto(entity.get(),false);
 
@@ -103,7 +104,7 @@ public class PeliculaServiceImpl implements PeliculaService<PeliculaDto,Long> {
             List<PeliculaDto> peliculaDto = new ArrayList<>();
 
             if(pelicula.isEmpty()){
-                throw new SpringException("Id no válido");
+                throw new SpringException(Errors.ERROR2);
             }
             for(Pelicula movie : pelicula){
                 peliculaDto.add(peliculaMapper.convertToDtoCities(movie));
@@ -131,7 +132,7 @@ public class PeliculaServiceImpl implements PeliculaService<PeliculaDto,Long> {
             Optional<Pelicula> pelicula = peliculaRepository.findById(id);
 
             if(!pelicula.isPresent()){
-                throw new SpringException("Id no válido");
+                throw new SpringException(Errors.ERROR3);
             }
             Pelicula entity = peliculaMapper.convertToEntity(peliculaDto);
             peliculaRepository.save(entity);
@@ -147,7 +148,7 @@ public class PeliculaServiceImpl implements PeliculaService<PeliculaDto,Long> {
                 peliculaRepository.deleteById(id);
                 return true;
             }else{
-                throw new SpringException("Id no válido");
+                throw new SpringException(Errors.ERROR4);
             }
     }
 
@@ -156,7 +157,7 @@ public class PeliculaServiceImpl implements PeliculaService<PeliculaDto,Long> {
 
             Optional<Pelicula> pelicula = peliculaRepository.findById(id);
             if(!pelicula.isPresent()){
-                throw new SpringException("Id no válido");
+                throw new SpringException(Errors.ERROR2);
             }
             Pelicula peliculaEntity = pelicula.get();
             peliculaEntity.getPersonajes().size();
@@ -171,7 +172,7 @@ public class PeliculaServiceImpl implements PeliculaService<PeliculaDto,Long> {
 
             Optional<Pelicula> pais = peliculaRepository.findById(id);
             if(!pais.isPresent()){
-                throw new SpringException("Id no válido");
+                throw new SpringException(Errors.ERROR2);
             }
             Pelicula peliculaEntity = pais.get();
             peliculaEntity.getPersonajes().size();

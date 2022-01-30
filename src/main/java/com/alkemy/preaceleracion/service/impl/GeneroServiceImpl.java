@@ -1,6 +1,7 @@
 package com.alkemy.preaceleracion.service.impl;
 
 import com.alkemy.preaceleracion.dto.GeneroDto;
+import com.alkemy.preaceleracion.enums.Errors;
 import com.alkemy.preaceleracion.exception.SpringException;
 import com.alkemy.preaceleracion.mapper.GeneroMapper;
 import com.alkemy.preaceleracion.model.Genero;
@@ -31,7 +32,7 @@ public class GeneroServiceImpl implements GeneroService<GeneroDto,Long> {
             List<Genero> generos = generoRepository.findAll();
 
             if(generos.isEmpty()){
-                throw new SpringException("La lista de géneros esta vacía");
+                throw new SpringException(Errors.ERROR1);
             }
             for(Genero genero : generos){
                 generoDtos.add(generoConverter.convertToDto(genero));
@@ -47,7 +48,7 @@ public class GeneroServiceImpl implements GeneroService<GeneroDto,Long> {
             Optional<Genero> genero = generoRepository.findById(id);
 
             if(!genero.isPresent()){
-                throw new SpringException("Id de género no válido");
+                throw new SpringException(Errors.ERROR2);
             }
             return generoConverter.convertToDto(genero.get());
 
@@ -69,7 +70,7 @@ public class GeneroServiceImpl implements GeneroService<GeneroDto,Long> {
 
             Genero genero = generoRepository.getById(dto.getId());
             if(genero == null){
-                throw new SpringException("Id de género no válido");
+                throw new SpringException(Errors.ERROR3);
             }
             genero = generoConverter.convertToEntity(dto);
             generoRepository.save(genero);
@@ -85,7 +86,7 @@ public class GeneroServiceImpl implements GeneroService<GeneroDto,Long> {
             if(generoRepository.existsById(id)) {
                 generoRepository.deleteById(id);
             }else {
-                throw new SpringException("Id de género no válido");
+                throw new SpringException(Errors.ERROR4);
             }
 
     }

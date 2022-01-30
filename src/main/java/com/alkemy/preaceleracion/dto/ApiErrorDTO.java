@@ -1,5 +1,6 @@
 package com.alkemy.preaceleracion.dto;
 
+import com.alkemy.preaceleracion.enums.Errors;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
